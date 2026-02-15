@@ -1,4 +1,4 @@
-const questoes = [const questoes = [
+const questoes = [
 
 {
 caso:"Sentença desfavorável proferida pela Vara do Trabalho.",
@@ -274,14 +274,46 @@ justificativa:"Pedido novo exige aditamento."
 }
 
 ];
-// Embaralhar perguntas (Fisher-Yates)
-function embaralhar(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+
+// embaralha automaticamente ao carregar
+function embaralhar(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[array[i],array[j]]=[array[j],array[i]];
+}
 }
 
-// embaralha assim que o site carrega
 embaralhar(questoes);
 
+let atual=0;
+
+function carregar(){
+const q=questoes[atual];
+document.getElementById("caso").innerHTML="<p><strong>Caso:</strong> "+q.caso+"</p>";
+const div=document.getElementById("opcoes");
+div.innerHTML="";
+q.opcoes.forEach(op=>{
+const b=document.createElement("button");
+b.innerText=op;
+b.onclick=()=>responder(op);
+div.appendChild(b);
+});
+document.getElementById("resultado").innerHTML="";
+}
+
+function responder(escolha){
+const q=questoes[atual];
+if(escolha===q.correta){
+document.getElementById("resultado").innerHTML="✅ Correto!<br>"+q.justificativa;
+}else{
+document.getElementById("resultado").innerHTML="❌ Errado.<br>Resposta correta: "+q.correta+"<br>"+q.justificativa;
+}
+}
+
+function proxima(){
+atual++;
+if(atual>=questoes.length)atual=0;
+carregar();
+}
+
+carregar();
