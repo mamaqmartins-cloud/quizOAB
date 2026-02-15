@@ -1,76 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Quiz OAB Trabalhista</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color: #fff;
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
 }
 
-.container {
-    max-width: 700px;
-    margin: auto;
-    padding: 20px;
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
 }
 
-.card {
-    background: #ffffff10;
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 0 20px #00000040;
+.card{
+background:#ffffff15;
+border-radius:15px;
+padding:20px;
+box-shadow:0 0 20px #00000060;
 }
 
-h1 {
-    text-align: center;
+h1{text-align:center;}
+
+button{
+width:100%;
+margin:6px 0;
+padding:12px;
+border-radius:8px;
+border:none;
+font-weight:bold;
+background:#00c6ff;
+cursor:pointer;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: none;
-    background: #00c6ff;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-}
+.correct{background:#4caf50!important;}
+.wrong{background:#f44336!important;}
 
-button:hover {
-    opacity: .85;
-}
+.stats{text-align:center;margin-bottom:15px;}
 
-.correct {
-    background: #4caf50 !important;
-}
-
-.wrong {
-    background: #f44336 !important;
-}
-
-.stats {
-    text-align:center;
-    margin-bottom:15px;
-}
-
-small {
-    opacity:.7;
-}
-
-footer {
-    text-align:center;
-    margin-top:15px;
-    font-size:12px;
-    opacity:.6;
-}
+footer{text-align:center;font-size:12px;opacity:.6;margin-top:15px;}
 </style>
 </head>
 
@@ -82,9 +57,7 @@ footer {
 <h1>Quiz OAB Trabalhista</h1>
 
 <div class="stats">
-<div>✅ Acertos: <span id="hits">0</span></div>
-<div>❌ Erros: <span id="miss">0</span></div>
-<small>salvo automaticamente</small>
+✅ <span id="hits">0</span> | ❌ <span id="miss">0</span>
 </div>
 
 <p id="question"></p>
@@ -95,97 +68,136 @@ footer {
 
 </div>
 
-<footer>
-Feito por Tia May 😄
-</footer>
+<footer>Feito por Tia May 😄</footer>
 </div>
 
 <script>
 
-/* ===================================================
-   👉 COLE AQUI SUAS 80 QUESTÕES
-=================================================== */
-
 const questions = [
-/* EXEMPLO — APAGUE ESTES E COLE OS SEUS */
-{
-prompt: "Empregado pleiteia verbas rescisórias + horas extras. Peça?",
-options: ["Reclamação Trabalhista","Mandado de Segurança","Agravo de Instrumento","Recurso Ordinário"],
-answer: 0
-},
-{
-prompt: "Decisão interlocutória na execução. Recurso?",
-options: ["Agravo de Petição","RO","AI","Embargos"],
-answer: 0
-}
+
+/* ====== 80 QUESTÕES ====== */
+
+{prompt:"Empregado ajuíza pedido de verbas rescisórias e horas extras.",options:["Reclamação Trabalhista","Mandado de Segurança","RO","Agravo"],answer:0},
+{prompt:"Decisão definitiva da Vara do Trabalho.",options:["Recurso Ordinário","Agravo","Embargos","MS"],answer:0},
+{prompt:"Execução trabalhista. Recurso cabível.",options:["Agravo de Petição","RO","AI","Embargos"],answer:0},
+{prompt:"Indeferimento de tutela antes da sentença.",options:["Mandado de Segurança","RO","AP","Embargos"],answer:0},
+{prompt:"Erro material na sentença.",options:["Embargos de Declaração","RO","AP","AI"],answer:0},
+{prompt:"Acórdão do TRT com violação literal da CF.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
+{prompt:"Empresa quer discutir matéria constitucional no TST.",options:["Recurso Extraordinário","RR","AP","ED"],answer:0},
+{prompt:"Sentença transitada em julgado com vício.",options:["Ação Rescisória","RO","MS","RR"],answer:0},
+{prompt:"Decisão monocrática do relator no TRT.",options:["Agravo Interno","AP","RR","MS"],answer:0},
+{prompt:"Despacho que nega seguimento ao RR.",options:["Agravo de Instrumento","RO","AP","ED"],answer:0},
+
+{prompt:"Empregado pede reconhecimento de vínculo.",options:["Reclamação Trabalhista","MS","RO","AP"],answer:0},
+{prompt:"Execução: erro de cálculo.",options:["Embargos à Execução","RO","RR","MS"],answer:0},
+{prompt:"Terceiro sofre constrição patrimonial.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
+{prompt:"Nulidade por negativa de prestação jurisdicional.",options:["Embargos de Declaração","RO","AP","MS"],answer:0},
+{prompt:"Multa por atraso salarial.",options:["Reclamação Trabalhista","RO","MS","RR"],answer:0},
+{prompt:"Decisão em execução.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
+{prompt:"Bloqueio ilegal de salário.",options:["Mandado de Segurança","RO","AP","ED"],answer:0},
+{prompt:"Sentença improcedente.",options:["Recurso Ordinário","AP","RR","MS"],answer:0},
+{prompt:"Violação direta da CF após TST.",options:["Recurso Extraordinário","RR","RO","AP"],answer:0},
+{prompt:"Decisão interlocutória irrecorrível.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
+
+{prompt:"Estabilidade gestante.",options:["Reclamação Trabalhista","MS","RR","RO"],answer:0},
+{prompt:"Indenização por dano moral.",options:["Reclamação Trabalhista","RO","AP","MS"],answer:0},
+{prompt:"Erro de omissão.",options:["Embargos de Declaração","RO","AP","RR"],answer:0},
+{prompt:"Penhora indevida de veículo.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
+{prompt:"Empresa quer destrancar RR.",options:["Agravo de Instrumento","RO","AP","ED"],answer:0},
+{prompt:"Execução definitiva.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
+{prompt:"Decisão colegiada TRT.",options:["Recurso de Revista","AP","RO","MS"],answer:0},
+{prompt:"Matéria infraconstitucional no TRT.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
+{prompt:"Erro aritmético.",options:["Embargos de Declaração","RO","AP","MS"],answer:0},
+{prompt:"Desconsideração da personalidade jurídica.",options:["Impugnação na execução","RO","RR","MS"],answer:0},
+
+{prompt:"Reconhecimento de grupo econômico.",options:["Reclamação Trabalhista","RO","RR","MS"],answer:0},
+{prompt:"Execução provisória.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
+{prompt:"Nulidade de citação.",options:["Embargos à Execução","RO","RR","MS"],answer:0},
+{prompt:"Decisão monocrática TST.",options:["Agravo Interno","RO","AP","MS"],answer:0},
+{prompt:"Sentença líquida.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
+{prompt:"Cumprimento de acordo.",options:["Petição simples","RO","AP","MS"],answer:0},
+{prompt:"Erro de premissa fática.",options:["Embargos de Declaração","RO","RR","MS"],answer:0},
+{prompt:"Matéria constitucional originária.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
+{prompt:"Revisão de coisa julgada.",options:["Ação Rescisória","RO","RR","MS"],answer:0},
+{prompt:"Bloqueio Bacen indevido.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
+
+{prompt:"Verbas rescisórias.",options:["Reclamação Trabalhista","RO","RR","MS"],answer:0},
+{prompt:"Horas extras.",options:["Reclamação Trabalhista","RO","AP","MS"],answer:0},
+{prompt:"Decisão em liquidação.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
+{prompt:"Erro formal no acórdão.",options:["Embargos de Declaração","RO","RR","MS"],answer:0},
+{prompt:"Penhora de bem de família.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
+{prompt:"Decisão TRT desfavorável.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
+{prompt:"Trancar RR.",options:["Agravo de Instrumento","RO","AP","MS"],answer:0},
+{prompt:"Sentença terminativa.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
+{prompt:"Violação literal de lei.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
+{prompt:"Erro de cálculo na execução.",options:["Embargos à Execução","RO","RR","MS"],answer:0}
+
 ];
 
-/* =================================================== */
-
-function shuffle(array){
-for(let i=array.length-1;i>0;i--){
+function shuffle(a){
+for(let i=a.length-1;i>0;i--){
 const j=Math.floor(Math.random()*(i+1));
-[array[i],array[j]]=[array[j],array[i]];
+[a[i],a[j]]=[a[j],a[i]];
 }
 }
 
 shuffle(questions);
 
-let index=0;
+let i=0;
 
-let hits = Number(localStorage.getItem("hits")) || 0;
-let miss = Number(localStorage.getItem("miss")) || 0;
+let hits=Number(localStorage.getItem("hits"))||0;
+let miss=Number(localStorage.getItem("miss"))||0;
 
 document.getElementById("hits").innerText=hits;
 document.getElementById("miss").innerText=miss;
 
-function loadQuestion(){
-const q=questions[index];
+function load(){
+const q=questions[i];
 document.getElementById("question").innerText=q.prompt;
 
-const answers=document.getElementById("answers");
-answers.innerHTML="";
+const box=document.getElementById("answers");
+box.innerHTML="";
 
-let opts=q.options.map((text,i)=>({text,i}));
-shuffle(opts);
+let ops=q.options.map((t,idx)=>({t,idx}));
+shuffle(ops);
 
-opts.forEach(o=>{
-const btn=document.createElement("button");
-btn.innerText=o.text;
-btn.onclick=()=>check(o.i,btn);
-answers.appendChild(btn);
+ops.forEach(o=>{
+const b=document.createElement("button");
+b.innerText=o.t;
+b.onclick=()=>check(o.idx,b);
+box.appendChild(b);
 });
 }
 
-function check(i,btn){
-const q=questions[index];
-document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
+function check(x,btn){
+document.querySelectorAll("button").forEach(b=>b.disabled=true);
 
-if(i===q.answer){
+if(x===questions[i].answer){
 btn.classList.add("correct");
 hits++;
-localStorage.setItem("hits",hits);
 }else{
 btn.classList.add("wrong");
 miss++;
-localStorage.setItem("miss",miss);
 }
+
+localStorage.setItem("hits",hits);
+localStorage.setItem("miss",miss);
 
 document.getElementById("hits").innerText=hits;
 document.getElementById("miss").innerText=miss;
 }
 
 function nextQuestion(){
-index++;
-if(index>=questions.length){
-alert("Fim do quiz!");
-index=0;
+i++;
+if(i>=questions.length){
+alert("Fim!");
+i=0;
 shuffle(questions);
 }
-loadQuestion();
+load();
 }
 
-loadQuestion();
+load();
 
 </script>
 
