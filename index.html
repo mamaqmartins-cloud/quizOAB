@@ -170,7 +170,10 @@ box.appendChild(b);
 }
 
 function check(x,btn){
-document.querySelectorAll("button").forEach(b=>b.disabled=true);
+function load(){
+document.querySelectorAll("button").forEach(b=>b.disabled=false);
+...
+
 
 if(x===questions[i].answer){
 btn.classList.add("correct");
