@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Quiz OAB Trabalhista</title>
 
 <style>
@@ -57,14 +56,14 @@ footer{text-align:center;font-size:12px;opacity:.6;margin-top:15px;}
 <h1>Quiz OAB Trabalhista</h1>
 
 <div class="stats">
-✅ <span id="hits">0</span> | ❌ <span id="miss">0</span>
+Acertos: <span id="hits">0</span> | Erros: <span id="miss">0</span>
 </div>
 
 <p id="question"></p>
 
 <div id="answers"></div>
 
-<button onclick="nextQuestion()">Próxima</button>
+<button id="next">Próxima</button>
 
 </div>
 
@@ -73,65 +72,15 @@ footer{text-align:center;font-size:12px;opacity:.6;margin-top:15px;}
 
 <script>
 
-const questions = [
-
-/* ====== 80 QUESTÕES ====== */
-
-{prompt:"Empregado ajuíza pedido de verbas rescisórias e horas extras.",options:["Reclamação Trabalhista","Mandado de Segurança","RO","Agravo"],answer:0},
-{prompt:"Decisão definitiva da Vara do Trabalho.",options:["Recurso Ordinário","Agravo","Embargos","MS"],answer:0},
-{prompt:"Execução trabalhista. Recurso cabível.",options:["Agravo de Petição","RO","AI","Embargos"],answer:0},
-{prompt:"Indeferimento de tutela antes da sentença.",options:["Mandado de Segurança","RO","AP","Embargos"],answer:0},
-{prompt:"Erro material na sentença.",options:["Embargos de Declaração","RO","AP","AI"],answer:0},
-{prompt:"Acórdão do TRT com violação literal da CF.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
-{prompt:"Empresa quer discutir matéria constitucional no TST.",options:["Recurso Extraordinário","RR","AP","ED"],answer:0},
-{prompt:"Sentença transitada em julgado com vício.",options:["Ação Rescisória","RO","MS","RR"],answer:0},
-{prompt:"Decisão monocrática do relator no TRT.",options:["Agravo Interno","AP","RR","MS"],answer:0},
-{prompt:"Despacho que nega seguimento ao RR.",options:["Agravo de Instrumento","RO","AP","ED"],answer:0},
-
-{prompt:"Empregado pede reconhecimento de vínculo.",options:["Reclamação Trabalhista","MS","RO","AP"],answer:0},
-{prompt:"Execução: erro de cálculo.",options:["Embargos à Execução","RO","RR","MS"],answer:0},
-{prompt:"Terceiro sofre constrição patrimonial.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
-{prompt:"Nulidade por negativa de prestação jurisdicional.",options:["Embargos de Declaração","RO","AP","MS"],answer:0},
-{prompt:"Multa por atraso salarial.",options:["Reclamação Trabalhista","RO","MS","RR"],answer:0},
-{prompt:"Decisão em execução.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
-{prompt:"Bloqueio ilegal de salário.",options:["Mandado de Segurança","RO","AP","ED"],answer:0},
-{prompt:"Sentença improcedente.",options:["Recurso Ordinário","AP","RR","MS"],answer:0},
-{prompt:"Violação direta da CF após TST.",options:["Recurso Extraordinário","RR","RO","AP"],answer:0},
-{prompt:"Decisão interlocutória irrecorrível.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
-
-{prompt:"Estabilidade gestante.",options:["Reclamação Trabalhista","MS","RR","RO"],answer:0},
-{prompt:"Indenização por dano moral.",options:["Reclamação Trabalhista","RO","AP","MS"],answer:0},
-{prompt:"Erro de omissão.",options:["Embargos de Declaração","RO","AP","RR"],answer:0},
-{prompt:"Penhora indevida de veículo.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
-{prompt:"Empresa quer destrancar RR.",options:["Agravo de Instrumento","RO","AP","ED"],answer:0},
-{prompt:"Execução definitiva.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
-{prompt:"Decisão colegiada TRT.",options:["Recurso de Revista","AP","RO","MS"],answer:0},
-{prompt:"Matéria infraconstitucional no TRT.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
-{prompt:"Erro aritmético.",options:["Embargos de Declaração","RO","AP","MS"],answer:0},
-{prompt:"Desconsideração da personalidade jurídica.",options:["Impugnação na execução","RO","RR","MS"],answer:0},
-
-{prompt:"Reconhecimento de grupo econômico.",options:["Reclamação Trabalhista","RO","RR","MS"],answer:0},
-{prompt:"Execução provisória.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
-{prompt:"Nulidade de citação.",options:["Embargos à Execução","RO","RR","MS"],answer:0},
-{prompt:"Decisão monocrática TST.",options:["Agravo Interno","RO","AP","MS"],answer:0},
-{prompt:"Sentença líquida.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
-{prompt:"Cumprimento de acordo.",options:["Petição simples","RO","AP","MS"],answer:0},
-{prompt:"Erro de premissa fática.",options:["Embargos de Declaração","RO","RR","MS"],answer:0},
-{prompt:"Matéria constitucional originária.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
-{prompt:"Revisão de coisa julgada.",options:["Ação Rescisória","RO","RR","MS"],answer:0},
-{prompt:"Bloqueio Bacen indevido.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
-
-{prompt:"Verbas rescisórias.",options:["Reclamação Trabalhista","RO","RR","MS"],answer:0},
-{prompt:"Horas extras.",options:["Reclamação Trabalhista","RO","AP","MS"],answer:0},
-{prompt:"Decisão em liquidação.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
-{prompt:"Erro formal no acórdão.",options:["Embargos de Declaração","RO","RR","MS"],answer:0},
-{prompt:"Penhora de bem de família.",options:["Embargos de Terceiro","RO","AP","MS"],answer:0},
-{prompt:"Decisão TRT desfavorável.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
-{prompt:"Trancar RR.",options:["Agravo de Instrumento","RO","AP","MS"],answer:0},
-{prompt:"Sentença terminativa.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
-{prompt:"Violação literal de lei.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
-{prompt:"Erro de cálculo na execução.",options:["Embargos à Execução","RO","RR","MS"],answer:0}
-
+const questions=[
+{prompt:"Verbas rescisórias.",options:["Reclamação Trabalhista","RO","AP","MS"],answer:0},
+{prompt:"Sentença da Vara.",options:["Recurso Ordinário","RR","AP","MS"],answer:0},
+{prompt:"Execução.",options:["Agravo de Petição","RO","RR","MS"],answer:0},
+{prompt:"Erro material.",options:["Embargos de Declaração","RO","RR","MS"],answer:0},
+{prompt:"Bloqueio indevido.",options:["Mandado de Segurança","RO","AP","RR"],answer:0},
+{prompt:"Acórdão TRT.",options:["Recurso de Revista","RO","AP","MS"],answer:0},
+{prompt:"Negado seguimento RR.",options:["Agravo de Instrumento","RO","AP","MS"],answer:0},
+{prompt:"Coisa julgada viciada.",options:["Ação Rescisória","RO","AP","MS"],answer:0}
 ];
 
 function shuffle(a){
@@ -151,29 +100,27 @@ let miss=Number(localStorage.getItem("miss"))||0;
 document.getElementById("hits").innerText=hits;
 document.getElementById("miss").innerText=miss;
 
+const question=document.getElementById("question");
+const answers=document.getElementById("answers");
+const next=document.getElementById("next");
+
 function load(){
-const q=questions[i];
-document.getElementById("question").innerText=q.prompt;
+answers.innerHTML="";
+question.innerText=questions[i].prompt;
 
-const box=document.getElementById("answers");
-box.innerHTML="";
-
-let ops=q.options.map((t,idx)=>({t,idx}));
+let ops=questions[i].options.map((t,idx)=>({t,idx}));
 shuffle(ops);
 
 ops.forEach(o=>{
 const b=document.createElement("button");
 b.innerText=o.t;
 b.onclick=()=>check(o.idx,b);
-box.appendChild(b);
+answers.appendChild(b);
 });
 }
 
 function check(x,btn){
-function load(){
-document.querySelectorAll("button").forEach(b=>b.disabled=false);
-...
-
+document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
 
 if(x===questions[i].answer){
 btn.classList.add("correct");
@@ -190,15 +137,15 @@ document.getElementById("hits").innerText=hits;
 document.getElementById("miss").innerText=miss;
 }
 
-function nextQuestion(){
+next.onclick=()=>{
 i++;
 if(i>=questions.length){
-alert("Fim!");
+alert("Fim do quiz!");
 i=0;
 shuffle(questions);
 }
 load();
-}
+};
 
 load();
 
