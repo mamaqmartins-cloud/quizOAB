@@ -1,22 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Quiz OAB Trabalhista</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color: #fff;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff10;
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 20px #00000040;
+}
+
+h1 {
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    background: #00c6ff;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+.correct {
+    background: #4caf50 !important;
+}
+
+.wrong {
+    background: #f44336 !important;
+}
+
+.stats {
+    text-align:center;
+    margin-bottom:15px;
+}
+
+small {
+    opacity:.7;
+}
+
+footer {
+    text-align:center;
+    margin-top:15px;
+    font-size:12px;
+    opacity:.6;
+}
+</style>
+</head>
+
 <body>
 
-<h2>Quiz – OAB Trabalhista</h2>
+<div class="container">
+<div class="card">
 
-<div id="status"></div>
-<div id="placar"></div>
+<h1>Quiz OAB Trabalhista</h1>
 
-<hr>
+<div class="stats">
+<div>✅ Acertos: <span id="hits">0</span></div>
+<div>❌ Erros: <span id="miss">0</span></div>
+<small>salvo automaticamente</small>
+</div>
 
-<div id="caso"></div>
+<p id="question"></p>
 
-<div id="opcoes"></div>
+<div id="answers"></div>
 
-<div id="resultado"></div>
+<button onclick="nextQuestion()">Próxima</button>
 
-<button onclick="proxima()">Próxima questão</button>
+</div>
 
-<br><br>
-<button onclick="resetar()">Resetar estatísticas</button>
+<footer>
+feito pela Dra. Maísa 😄
+</footer>
+</div>
 
-<script src="script.js?v=10"></script>
+<script>
+
+/* ===================================================
+   👉 COLE AQUI SUAS 80 QUESTÕES
+=================================================== */
+
+const questions = [
+/* EXEMPLO — APAGUE ESTES E COLE OS SEUS */
+{
+prompt: "Empregado pleiteia verbas rescisórias + horas extras. Peça?",
+options: ["Reclamação Trabalhista","Mandado de Segurança","Agravo de Instrumento","Recurso Ordinário"],
+answer: 0
+},
+{
+prompt: "Decisão interlocutória na execução. Recurso?",
+options: ["Agravo de Petição","RO","AI","Embargos"],
+answer: 0
+}
+];
+
+/* =================================================== */
+
+function shuffle(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[array[i],array[j]]=[array[j],array[i]];
+}
+}
+
+shuffle(questions);
+
+let index=0;
+
+let hits = Number(localStorage.getItem("hits")) || 0;
+let miss = Number(localStorage.getItem("miss")) || 0;
+
+document.getElementById("hits").innerText=hits;
+document.getElementById("miss").innerText=miss;
+
+function loadQuestion(){
+const q=questions[index];
+document.getElementById("question").innerText=q.prompt;
+
+const answers=document.getElementById("answers");
+answers.innerHTML="";
+
+let opts=q.options.map((text,i)=>({text,i}));
+shuffle(opts);
+
+opts.forEach(o=>{
+const btn=document.createElement("button");
+btn.innerText=o.text;
+btn.onclick=()=>check(o.i,btn);
+answers.appendChild(btn);
+});
+}
+
+function check(i,btn){
+const q=questions[index];
+document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
+
+if(i===q.answer){
+btn.classList.add("correct");
+hits++;
+localStorage.setItem("hits",hits);
+}else{
+btn.classList.add("wrong");
+miss++;
+localStorage.setItem("miss",miss);
+}
+
+document.getElementById("hits").innerText=hits;
+document.getElementById("miss").innerText=miss;
+}
+
+function nextQuestion(){
+index++;
+if(index>=questions.length){
+alert("Fim do quiz!");
+index=0;
+shuffle(questions);
+}
+loadQuestion();
+}
+
+loadQuestion();
+
+</script>
+
 </body>
+</html>
